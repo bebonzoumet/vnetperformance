@@ -1,0 +1,1 @@
+{"tamanho_bytes": 128, "server_addr": "127.0.0.1", "server_port": 12000, "client_addr": "127.0.0.1", "client_port": 12001, "id_cliente": "Cliente", "id_servidor": "Servidor", "delay": 2, "loss_prob":0, "size":100}
