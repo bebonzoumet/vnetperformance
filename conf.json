@@ -1,0 +1,1 @@
+{"server_addr": "10.183.99.53", "server_port": 12000, "client_addr": "10.183.99.58", "client_port": 12001, "id_cliente": "Cliente", "id_servidor": "Servidor", "size": 5000, "delay":0, "loss_prob":1}
