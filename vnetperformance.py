@@ -14,22 +14,42 @@ class VnetPerformance:
         with open("vnetperformance.json","r") as f:
             self.config = json.load(f)
         self.bytes_size = self.config["size"]
+        if self.host_id == "Servidor":
+            self.addr = self.config["server_addr"]
+            self.port = self.config["server_port"]
+        elif self.host_id == "Cliente":
+            self.addr = self.config["client_addr"]
+            self.port = self.config["client_port"]
 
-    def cria_socket(self, addr, port):
+    def create_dataset(self):
+        """
+        Cria um dataset de tamanho size
+        """
+        data=""
+        data_encoded = data.encode()
+        if self.bytes_size<33:
+            pass
+        elif sys.getsizeof(data_encoded) == self.bytes_size:
+            pass
+        else:
+            adicional = self.bytes_size - sys.getsizeof(data_encoded)
+            data = "a"*adicional
+        return data
+
+    def cria_socket(self):
         """
         Virtualização do socket com endereço e porta passados como parâmetro
         """
-        socket_novo = socket(AF_INET,SOCK_DGRAM)
-        socket_novo.bind((addr,port))
-        return socket_novo
+        self.socket = socket(AF_INET,SOCK_DGRAM)
+        self.socket.bind((self.addr,self.port))
 
-    def close_socket(self, socket):
+    def close_socket(self):
         """
         Fecha o socket passado como parâmetro
         """
-        socket.close()
+        self.socket.close()
 
-    def send(self, socket, msg, dest):
+    def send(self, msg, dest):
         """
         Virtualização da chamada de comunicação send
         """
@@ -38,15 +58,15 @@ class VnetPerformance:
             time.sleep(random.uniform(0,self.config["delay"]*2))
             with open("vnetperformance.log","a+") as f:
                 f.write(str(time.strftime("%d/%m/%Y - %H:%M:%S"))+", "+self.host_id+", send, "+str(sys.getsizeof(msg))+" bytes"+"\n")
-            socket.sendto(msg.encode(),dest)
+            self.socket.sendto(msg.encode(),dest)
         else:
             print("pacote não enviado")
 
-    def recv(self, socket):
+    def recv(self):
         """
         Virtualização da chamada de comunicação receive
         """
-        received = socket.recvfrom(self.bytes_size)
+        received = self.socket.recvfrom(self.bytes_size)
         msg = received[0]
         with open("vnetperformance.log","a+") as f:
             f.write(str(time.strftime("%d/%m/%Y - %H:%M:%S"))+", "+self.host_id+", receive, "+str(sys.getsizeof(msg.decode()))+" bytes"+"\n")
